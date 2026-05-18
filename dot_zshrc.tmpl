@@ -9,6 +9,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+# Fix: define kcbt (Shift+Tab) if missing in current terminfo
+[[ -z $terminfo[kcbt] ]] && typeset -g 'terminfo[kcbt]=\E[Z'
+
 {{ if eq .chezmoi.os "darwin" -}}
 if [ -f "/opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]; then
   source "/opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
