@@ -1,26 +1,9 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-
 typeset -U path PATH
 
-# Reversible shell UX block:
-# - comment out the next two blocks to disable p10k and autocomplete extras fast.
+# p10k instant prompt - debe ir al inicio
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-# Fix: define kcbt (Shift+Tab) if missing in current terminfo
-[[ -z $terminfo[kcbt] ]] && typeset -g 'terminfo[kcbt]=\E[Z'
-
-{{ if eq .chezmoi.os "darwin" -}}
-if [ -f "/opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]; then
-  source "/opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
-fi
-{{- else -}}
-if [ -f "/usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh" ]; then
-  source "/usr/share/zsh/plugins/zsh-autocomplete/zsh-autocomplete.plugin.zsh"
-fi
-{{- end }}
 
 # Core tool paths
 path=(
@@ -38,37 +21,40 @@ export PATH
 export EDITOR="nvim"
 export VISUAL="nvim"
 
-# Path to your Oh My Zsh installation.
+# Oh My Zsh
 export ZSH="$HOME/.oh-my-zsh"
-
 ZSH_THEME="robbyrussell"
-
-plugins=(git)
-
+plugins=(git fzf-tab)
 source $ZSH/oh-my-zsh.sh
 
-# Better shell UX when the tools are installed.
+# Powerlevel10k
 {{ if eq .chezmoi.os "darwin" -}}
 if [ -f "/opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme" ]; then
   source "/opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme"
-fi
-
-if [ -f "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
-  source "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-fi
-
-if [ -f "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
-  source "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 {{- else -}}
 if [ -f "/usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme" ]; then
   source "/usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme"
 fi
+{{- end }}
 
+# Autosuggestions (texto gris inline)
+{{ if eq .chezmoi.os "darwin" -}}
+if [ -f "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+  source "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+{{- else -}}
 if [ -f "/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
   source "/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
+{{- end }}
 
+# Syntax highlighting
+{{ if eq .chezmoi.os "darwin" -}}
+if [ -f "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
+  source "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
+{{- else -}}
 if [ -f "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]; then
   source "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
@@ -82,7 +68,6 @@ alias lla='ls -la'
 alias nv='nvim .'
 
 {{ if eq .chezmoi.os "darwin" -}}
-# Aliases solo Mac
 alias vs='windsurf .'
 alias jellyfinstart='cloudflared tunnel --url http://localhost:8096'
 {{- end }}
@@ -91,12 +76,14 @@ if command -v eza >/dev/null 2>&1; then
   alias ls='eza'
 elif command -v lsd >/dev/null 2>&1; then
   alias ls='lsd'
-elif command -v bat >/dev/null 2>&1; then
+fi
+
+if command -v bat >/dev/null 2>&1; then
   alias cat='bat'
 fi
 
 {{ if eq .chezmoi.os "darwin" -}}
-# Docker Desktop completions (Mac)
+# Docker Desktop completions
 if [ -d "$HOME/.docker/completions" ]; then
   fpath=($HOME/.docker/completions $fpath)
 fi
@@ -123,6 +110,5 @@ if command -v carapace >/dev/null 2>&1; then
   source <(carapace _carapace)
 fi
 
-if [ -f "$HOME/.p10k.zsh" ]; then
-  source "$HOME/.p10k.zsh"
-fi
+# p10k config
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
