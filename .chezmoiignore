@@ -1,0 +1,27 @@
+# node_modules y locks
+**/node_modules/**
+**/package-lock.json
+
+# Caches y compilados
+**/.cache/**
+**/__pycache__/**
+**/*.pyc
+
+# nvim: no versionar git interno ni lock
+dot_config/nvim/dot_git/**
+dot_config/nvim/lazy-lock.json
+dot_config/nvim/lua/dot_DS_Store
+dot_config/nvim/lua/plugins/dot_DS_Store
+
+# Archivos temporales
+**/.DS_Store
+**/dot_DS_Store
+**/*.swp
+**/*.swo
+
+# SSH (nunca versionar)
+dot_ssh/**
+
+# Secretos
+**/.env
+**/.env.*
