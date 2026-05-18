@@ -45,14 +45,8 @@ config.cursor_blink_ease_out = "Constant"
 -- │                            NEOVIM OPTIMIZATIONS                              │
 -- └──────────────────────────────────────────────────────────────────────────────┘
 
--- Terminal & Colors
--- WSL doesn't have wezterm terminfo, so we use xterm-256color there
--- See: https://github.com/Gentleman-Programming/Gentleman.Dots/issues/117
-if wezterm.target_triple:find("windows") then
-	config.term = "xterm-256color"
-else
-	config.term = "wezterm"
-end
+-- xterm-256color es más compatible que "wezterm" en Mac+tmux
+config.term = "xterm-256color"
 config.keys = {
 	{ key = "Return", mods = "SHIFT", action = wezterm.action.SendString("\x1b[13;2u") },
 }
