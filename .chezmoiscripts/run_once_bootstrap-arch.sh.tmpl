@@ -1,0 +1,61 @@
+#!/bin/bash
+# run_once: se ejecuta UNA SOLA VEZ cuando haces chezmoi apply en Arch Linux
+# chezmoi lo trackea por hash, si lo modificas vuelve a correr
+{{ if ne .chezmoi.os "linux" -}}
+exit 0  # no es Linux, nada que hacer
+{{- end }}
+
+set -e
+
+echo "==> [chezmoi] Instalando paquetes base con pacman..."
+sudo pacman -S --noconfirm --needed \
+  neovim \
+  tmux \
+  git \
+  zsh \
+  fzf \
+  zoxide \
+  atuin \
+  ripgrep \
+  fd \
+  lazygit \
+  curl \
+  wget \
+  base-devel
+
+echo "==> [chezmoi] Instalando yay (AUR helper)..."
+if ! command -v yay &>/dev/null; then
+  git clone https://aur.archlinux.org/yay.git /tmp/yay-install
+  (cd /tmp/yay-install && makepkg -si --noconfirm)
+  rm -rf /tmp/yay-install
+fi
+
+echo "==> [chezmoi] Instalando paquetes AUR..."
+yay -S --noconfirm --needed \
+  eza \
+  bat \
+  lsd \
+  carapace-bin \
+  zsh-autosuggestions \
+  zsh-syntax-highlighting \
+  zsh-autocomplete \
+  zsh-theme-powerlevel10k
+
+echo "==> [chezmoi] Instalando oh-my-zsh..."
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+echo "==> [chezmoi] Cambiando shell a zsh..."
+if [ "$SHELL" != "$(which zsh)" ]; then
+  chsh -s "$(which zsh)"
+fi
+
+echo "==> [chezmoi] Instalando TPM (tmux plugin manager)..."
+if [ ! -d "$HOME/.tmux/plugins/tpm" ]; then
+  git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
+echo ""
+echo "==> Listo. Abre tmux y presiona Ctrl+a I para instalar plugins."
+echo "==> Abre nvim para que LazyVim instale los plugins."

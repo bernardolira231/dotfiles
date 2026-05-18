@@ -53,7 +53,9 @@ if wezterm.target_triple:find("windows") then
 else
 	config.term = "wezterm"
 end
-config.enable_csi_u_key_encoding = true
+config.keys = {
+	{ key = "Return", mods = "SHIFT", action = wezterm.action.SendString("\x1b[13;2u") },
+}
 
 -- Undercurl support (LSP diagnostics, spelling)
 config.underline_thickness = 2
