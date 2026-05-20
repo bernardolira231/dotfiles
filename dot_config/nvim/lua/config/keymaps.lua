@@ -5,7 +5,7 @@
 vim.keymap.set("i", "aa", "<Esc>", { desc = "Salir del modo insertar aa" })
 
 vim.keymap.set("n", "<leader>;", function()
-  Snacks.dashboard()
+  Snacks.dashboard.open()
 end, { desc = "Abrir dashboard" })
 
 vim.keymap.set("n", "<leader>sj", function()
