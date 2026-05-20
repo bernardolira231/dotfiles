@@ -4,6 +4,10 @@
 
 vim.keymap.set("i", "aa", "<Esc>", { desc = "Salir del modo insertar aa" })
 
+vim.keymap.set("n", "<leader>;", function()
+  Snacks.dashboard()
+end, { desc = "Abrir dashboard" })
+
 vim.keymap.set("n", "<leader>sj", function()
   if vim.bo.filetype ~= "json" then
     vim.notify("JSON sort only works in json buffers", vim.log.levels.WARN)
