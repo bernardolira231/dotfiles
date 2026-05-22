@@ -24,8 +24,10 @@ export VISUAL="nvim"
 # Oh My Zsh
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
-plugins=(git fzf-tab)
+plugins=(git)
 source $ZSH/oh-my-zsh.sh
+
+zstyle ':completion:*' menu select
 
 # Powerlevel10k
 {{ if eq .chezmoi.os "darwin" -}}
