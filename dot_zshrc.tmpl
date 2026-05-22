@@ -105,11 +105,5 @@ if command -v atuin >/dev/null 2>&1; then
   eval "$(atuin init zsh)"
 fi
 
-if command -v carapace >/dev/null 2>&1; then
-  export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
-  zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
-  source <(carapace _carapace)
-fi
-
 # p10k config
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
