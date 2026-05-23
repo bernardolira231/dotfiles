@@ -22,6 +22,25 @@ icon_map() {
     "Postman") echo "󰛮" ;;
     "Docker") echo "󰡨" ;;
     "Tailscale") echo "󰒃" ;;
+    "AeroSpace") echo "󱂬" ;;
+    "SketchyBar") echo "󱂬" ;;
+    "Amethyst") echo "󱂬" ;;
+    "Karabiner-Elements") echo "⌨" ;;
+    "BetterDisplay") echo "󰍹" ;;
+    "balenaEtcher") echo "󰈔" ;;
+    "Jump Desktop Connect") echo "󰢹" ;;
+    "UTM") echo "󰢹" ;;
+    "Notion Calendar") echo "󰃭" ;;
+    "Numbers") echo "󰈙" ;;
+    "Postman Agent") echo "󰛮" ;;
+    "Logi Tune") echo "󰍽" ;;
+    "Logi Options+") echo "󰍽" ;;
+    "Microsoft Outlook") echo "󰴢" ;;
+    "Telegram Desktop") echo "󰈈" ;;
+    "WhatsApp") echo "󰖣" ;;
+    "Jellyfin") echo "󰎁" ;;
+    "Raycast") echo "󰕧" ;;
+    "Xcode") echo "󰀵" ;;
     "Microsoft Teams") echo "󰊻" ;;
     "Slack") echo "󰒱" ;;
     "Discord") echo "󰙯" ;;
@@ -31,7 +50,6 @@ icon_map() {
     "Finder") echo "󰀶" ;;
     "Spotify") echo "󰓇" ;;
     "Music") echo "󰓇" ;;
-    "Numbers") echo "󰈙" ;;
     "Preview") echo "󰋩" ;;
     *) echo "󰣆" ;;
   esac

@@ -88,27 +88,31 @@ sketchybar --add item network right \
     label.max_chars=14 \
     script="$PLUGIN_DIR/network.sh" \
     click_script='sketchybar --trigger network_refresh; sketchybar --set network popup.drawing=toggle' \
+    popup.align=right \
+    popup.horizontal=off \
     popup.background.color=0xee10131b \
     popup.background.corner_radius=10 \
     popup.blur_radius=20 \
   --subscribe network wifi_change system_woke network_refresh
 
 sketchybar --add item network.status popup.network \
-  --set network.status icon=󰖩 label="Loading..." width=160 background.drawing=on script="$PLUGIN_DIR/network.sh" \
+  --set network.status icon=󰖩 label="Loading..." width=190 label.max_chars=24 background.drawing=on script="$PLUGIN_DIR/network.sh" \
   --subscribe network.status network_refresh
 
 sketchybar --add item network.ip popup.network \
-  --set network.ip icon=󰩟 label="-" width=160 background.drawing=on script="$PLUGIN_DIR/network.sh" \
+  --set network.ip icon=󰩟 label="-" width=190 label.max_chars=24 background.drawing=on script="$PLUGIN_DIR/network.sh" \
   --subscribe network.ip network_refresh
 
 sketchybar --add item network.settings popup.network \
-  --set network.settings icon=󰒓 label="Open Network Settings" width=160 background.drawing=on click_script='open "x-apple.systempreferences:com.apple.Network-Settings.extension"; sketchybar --set network popup.drawing=off'
+  --set network.settings icon=󰒓 label="Open Network Settings" width=190 background.drawing=on click_script='open "x-apple.systempreferences:com.apple.Network-Settings.extension"; sketchybar --set network popup.drawing=off'
 
 sketchybar --add item volume right \
   --set volume \
     display=active \
     script="$PLUGIN_DIR/volume.sh" \
     click_script='sketchybar --trigger volume_refresh; sketchybar --set volume popup.drawing=toggle' \
+    popup.align=right \
+    popup.horizontal=off \
     popup.background.color=0xee10131b \
     popup.background.corner_radius=10 \
     popup.blur_radius=20 \
