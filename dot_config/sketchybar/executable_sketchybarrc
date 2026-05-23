@@ -1,0 +1,72 @@
+#!/bin/bash
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+WORKSPACES=(1 2 3 4 5 A S)
+
+BG=0x6606080f
+FG=0xfff3f6f9
+ACCENT=0xffe0c15a
+MUTED=0xff8a8fa3
+SURFACE=0x40263356
+
+sketchybar --bar \
+  position=top \
+  height=38 \
+  blur_radius=30 \
+  color=$BG \
+  corner_radius=12 \
+  padding_left=10 \
+  padding_right=10 \
+  y_offset=6 \
+  margin=10
+
+default=(
+  icon.font="IosevkaTerm Nerd Font Mono:Bold:15.0"
+  label.font="IosevkaTerm Nerd Font Mono:Semibold:13.0"
+  icon.color=$FG
+  label.color=$FG
+  icon.padding_left=8
+  icon.padding_right=8
+  label.padding_left=4
+  label.padding_right=8
+  background.color=$SURFACE
+  background.corner_radius=8
+  background.height=28
+  padding_left=4
+  padding_right=4
+)
+sketchybar --default "${default[@]}"
+
+sketchybar --add event aerospace_workspace_change
+
+for ws in "${WORKSPACES[@]}"; do
+  sketchybar --add item "workspace.$ws" left \
+    --set "workspace.$ws" \
+      icon="$ws" \
+      label.drawing=off \
+      script="$PLUGIN_DIR/aerospace.sh $ws" \
+      click_script="aerospace workspace $ws" \
+      background.drawing=on \
+    --subscribe "workspace.$ws" aerospace_workspace_change
+done
+
+sketchybar --add item spaces_sep left \
+  --set spaces_sep icon="|" label.drawing=off icon.color=$MUTED background.drawing=off padding_left=10 padding_right=10
+
+sketchybar --add item front_app left \
+  --set front_app icon=􀣺 icon.color=$ACCENT script="$PLUGIN_DIR/front_app.sh" background.drawing=off \
+  --subscribe front_app front_app_switched
+
+sketchybar --add item clock right \
+  --set clock update_freq=10 icon=󰥔 script="$PLUGIN_DIR/clock.sh"
+
+sketchybar --add item volume right \
+  --set volume icon=󰕾 script="$PLUGIN_DIR/volume.sh" \
+  --subscribe volume volume_change
+
+sketchybar --add item battery right \
+  --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+  --subscribe battery system_woke power_source_change
+
+sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$(aerospace list-workspaces --focused)"
+sketchybar --update
