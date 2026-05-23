@@ -133,6 +133,12 @@ sketchybar --add item tailscale.ip popup.tailscale \
   --set tailscale.ip icon=󰩟 label="-" width=190 label.max_chars=24 background.drawing=on script="$PLUGIN_DIR/tailscale.sh" \
   --subscribe tailscale.ip tailscale_refresh
 
+sketchybar --add item tailscale.connect popup.tailscale \
+  --set tailscale.connect icon=󰐊 label="Connect" width=190 background.drawing=on click_script="$PLUGIN_DIR/tailscale_toggle.sh up"
+
+sketchybar --add item tailscale.disconnect popup.tailscale \
+  --set tailscale.disconnect icon=󰅖 label="Disconnect" width=190 background.drawing=on click_script="$PLUGIN_DIR/tailscale_toggle.sh down"
+
 sketchybar --add item tailscale.open popup.tailscale \
   --set tailscale.open icon=󰒓 label="Open Tailscale" width=190 background.drawing=on click_script='open -a Tailscale; sketchybar --set tailscale popup.drawing=off'
 
