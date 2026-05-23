@@ -20,7 +20,7 @@ fi
 icons=$(printf '%s' "$icons" | xargs)
 
 if [ -z "$icons" ]; then
-  icons="-"
+  icons="·"
 fi
 
 if [ "$WORKSPACE" = "$FOCUSED_WORKSPACE" ]; then
@@ -30,9 +30,17 @@ if [ "$WORKSPACE" = "$FOCUSED_WORKSPACE" ]; then
     label="$icons" \
     background.color=0xffe0c15a
 else
-  sketchybar --set "$NAME" \
-    icon.color=0xfff3f6f9 \
-    label.color=0xfff3f6f9 \
-    label="$icons" \
-    background.color=0x40263356
+  if [ "$icons" = "·" ]; then
+    sketchybar --set "$NAME" \
+      icon.color=0xff8a8fa3 \
+      label.color=0xff8a8fa3 \
+      label="$icons" \
+      background.color=0x18263356
+  else
+    sketchybar --set "$NAME" \
+      icon.color=0xfff3f6f9 \
+      label.color=0xfff3f6f9 \
+      label="$icons" \
+      background.color=0x40263356
+  fi
 fi

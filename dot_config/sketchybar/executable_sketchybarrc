@@ -40,6 +40,8 @@ default=(
 sketchybar --default "${default[@]}"
 
 sketchybar --add event aerospace_workspace_change
+sketchybar --add event network_refresh
+sketchybar --add event volume_refresh
 
 for ws in "${MAIN_WORKSPACES[@]}"; do
   sketchybar --add item "workspace.$ws" left \
@@ -85,16 +87,45 @@ sketchybar --add item network right \
     update_freq=5 \
     label.max_chars=14 \
     script="$PLUGIN_DIR/network.sh" \
-    click_script='open "x-apple.systempreferences:com.apple.Network-Settings.extension"' \
-  --subscribe network wifi_change system_woke
+    click_script='sketchybar --trigger network_refresh; sketchybar --set network popup.drawing=toggle' \
+    popup.background.color=0xee10131b \
+    popup.background.corner_radius=10 \
+    popup.blur_radius=20 \
+  --subscribe network wifi_change system_woke network_refresh
+
+sketchybar --add item network.status popup.network \
+  --set network.status icon=󰖩 label="Loading..." width=160 background.drawing=on script="$PLUGIN_DIR/network.sh" \
+  --subscribe network.status network_refresh
+
+sketchybar --add item network.ip popup.network \
+  --set network.ip icon=󰩟 label="-" width=160 background.drawing=on script="$PLUGIN_DIR/network.sh" \
+  --subscribe network.ip network_refresh
+
+sketchybar --add item network.settings popup.network \
+  --set network.settings icon=󰒓 label="Open Network Settings" width=160 background.drawing=on click_script='open "x-apple.systempreferences:com.apple.Network-Settings.extension"; sketchybar --set network popup.drawing=off'
 
 sketchybar --add item volume right \
   --set volume \
     display=active \
     script="$PLUGIN_DIR/volume.sh" \
-    click_script='open "x-apple.systempreferences:com.apple.Sound-Settings.extension"' \
-    scroll_script="$PLUGIN_DIR/volume_control.sh" \
-  --subscribe volume volume_change
+    click_script='sketchybar --trigger volume_refresh; sketchybar --set volume popup.drawing=toggle' \
+    popup.background.color=0xee10131b \
+    popup.background.corner_radius=10 \
+    popup.blur_radius=20 \
+  --subscribe volume volume_change volume_refresh
+
+sketchybar --add item volume.status popup.volume \
+  --set volume.status icon=󰕾 label="Volume" width=150 background.drawing=on script="$PLUGIN_DIR/volume.sh" \
+  --subscribe volume.status volume_refresh volume_change
+
+sketchybar --add item volume.down popup.volume \
+  --set volume.down icon=󰝞 label="Lower" width=150 background.drawing=on click_script="$PLUGIN_DIR/volume_control.sh down"
+
+sketchybar --add item volume.up popup.volume \
+  --set volume.up icon=󰝝 label="Raise" width=150 background.drawing=on click_script="$PLUGIN_DIR/volume_control.sh up"
+
+sketchybar --add item volume.settings popup.volume \
+  --set volume.settings icon=󰒓 label="Open Sound Settings" width=150 background.drawing=on click_script='open "x-apple.systempreferences:com.apple.Sound-Settings.extension"; sketchybar --set volume popup.drawing=off'
 
 sketchybar --add item battery right \
   --set battery display=active update_freq=120 script="$PLUGIN_DIR/battery.sh" click_script='open "x-apple.systempreferences:com.apple.Battery-Settings.extension"' \
@@ -104,4 +135,6 @@ sketchybar --add item clock right \
   --set clock display=active update_freq=10 icon=󰥔 script="$PLUGIN_DIR/clock.sh"
 
 sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$(aerospace list-workspaces --focused)"
+sketchybar --trigger network_refresh
+sketchybar --trigger volume_refresh
 sketchybar --update

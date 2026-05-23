@@ -13,3 +13,7 @@ case "$VOLUME" in
 esac
 
 sketchybar --set "$NAME" icon="$ICON" label="${VOLUME}%"
+
+if [ "$NAME" = "volume" ] || [ "$SENDER" = "volume_refresh" ] || [ "$SENDER" = "volume_change" ]; then
+  sketchybar --set volume.status icon="$ICON" label="Volume ${VOLUME}%"
+fi
