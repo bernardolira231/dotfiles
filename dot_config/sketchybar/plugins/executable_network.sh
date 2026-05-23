@@ -16,4 +16,8 @@ elif [ -n "$DEFAULT_IF" ] && [ "$DEFAULT_IF" = "$ETH_DEVICE" ]; then
   LABEL="Ethernet"
 fi
 
+if [ ${#LABEL} -gt 12 ]; then
+  LABEL="${LABEL:0:12}..."
+fi
+
 sketchybar --set "$NAME" icon="$ICON" label="$LABEL"
