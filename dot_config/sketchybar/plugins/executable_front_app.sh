@@ -1,10 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
-# Some events send additional information specific to the event in the $INFO
-# variable. E.g. the front_app_switched event sends the name of the newly
-# focused application in the $INFO variable:
-# https://felixkratz.github.io/SketchyBar/config/events#events-and-scripting
+source "$CONFIG_DIR/plugins/icon_map.sh"
 
-if [ "$SENDER" = "front_app_switched" ]; then
-  sketchybar --set "$NAME" label="$INFO"
+APP_NAME="$INFO"
+if [ -z "$APP_NAME" ]; then
+  APP_NAME=$(osascript -e 'tell application "System Events" to get name of first application process whose frontmost is true' 2>/dev/null)
 fi
+
+ICON=$(icon_map "$APP_NAME")
+
+sketchybar --set "$NAME" icon="$ICON" label="$APP_NAME"
