@@ -44,6 +44,15 @@ sketchybar --add event network_refresh
 sketchybar --add event tailscale_refresh
 sketchybar --add event volume_refresh
 
+sketchybar --add item launcher left \
+  --set launcher \
+    icon=󰣇 \
+    label="" \
+    icon.color=$ACCENT \
+    background.drawing=off \
+    padding_right=10 \
+    click_script='open -a Raycast'
+
 for ws in "${MAIN_WORKSPACES[@]}"; do
   sketchybar --add item "workspace.$ws" left \
     --set "workspace.$ws" \
