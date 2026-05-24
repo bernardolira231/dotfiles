@@ -2,6 +2,11 @@
 
 source "$CONFIG_DIR/plugins/icon_map.sh"
 
+# Keep colors in sync with sketchybarrc (avoid sourcing it here).
+ACCENT=0xffe0c15a
+MUTED=0xff8a8fa3
+BAR_DARK=0xff06080f
+
 WORKSPACE="$1"
 FOCUSED_WORKSPACE="${FOCUSED_WORKSPACE:-$(aerospace list-workspaces --focused 2>/dev/null)}"
 
@@ -20,27 +25,28 @@ fi
 icons=$(printf '%s' "$icons" | xargs)
 
 if [ -z "$icons" ]; then
-  icons="·"
+  icons=""
 fi
 
 if [ "$WORKSPACE" = "$FOCUSED_WORKSPACE" ]; then
   sketchybar --set "$NAME" \
-    icon.color=0xff06080f \
-    label.color=0xff06080f \
+    icon.color=$BAR_DARK \
+    label.color=$BAR_DARK \
     label="$icons" \
-    background.color=0xffe0c15a
+    background.drawing=on \
+    background.color=$ACCENT
 else
-  if [ "$icons" = "·" ]; then
+  if [ -z "$icons" ]; then
     sketchybar --set "$NAME" \
-      icon.color=0xff8a8fa3 \
-      label.color=0xff8a8fa3 \
-      label="$icons" \
-      background.color=0x18263356
+      icon.color=$MUTED \
+      label.color=$MUTED \
+      label="" \
+      background.drawing=off
   else
     sketchybar --set "$NAME" \
-      icon.color=0xfff3f6f9 \
-      label.color=0xfff3f6f9 \
+      icon.color=$ACCENT \
+      label.color=$ACCENT \
       label="$icons" \
-      background.color=0x40263356
+      background.drawing=off
   fi
 fi

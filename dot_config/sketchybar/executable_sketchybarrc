@@ -6,52 +6,91 @@ SECONDARY_WORKSPACES=(A S)
 
 BG=0x3006080f
 FG=0xfff3f6f9
-ACCENT=0xffe0c15a
+# Sakura-friendly palette
+ACCENT=0xffcba6f7
 MUTED=0xff8a8fa3
 SURFACE=0x40263356
 SURFACE_SOFT=0x20263356
 
 sketchybar --bar \
   position=top \
-  height=28 \
-  blur_radius=20 \
+  height=37 \
+  blur_radius=30 \
   color=$BG \
   corner_radius=0 \
   y_offset=0 \
   margin=0 \
-  padding_left=6 \
-  padding_right=6
+  padding_left=10 \
+  padding_right=10
 
 default=(
-  icon.font="IosevkaTerm Nerd Font Mono:Bold:14.0"
-  label.font="IosevkaTerm Nerd Font Mono:Semibold:12.0"
+  icon.font="IosevkaTerm Nerd Font Mono:Bold:15.0"
+  label.font="IosevkaTerm Nerd Font Mono:Semibold:13.0"
   icon.color=$FG
   label.color=$FG
-  icon.padding_left=5
-  icon.padding_right=5
-  label.padding_left=3
-  label.padding_right=6
-  padding_left=2
-  padding_right=2
+  icon.padding_left=10
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=10
+  padding_left=5
+  padding_right=5
   background.color=$SURFACE_SOFT
-  background.corner_radius=6
-  background.height=20
+  background.corner_radius=5
+  background.height=24
 )
 sketchybar --default "${default[@]}"
 
+# System icons with SF Symbols.
+SYS_ICON_FONT="SF Pro:Semibold:15.0"
+
 sketchybar --add event aerospace_workspace_change
+sketchybar --add event bluetooth_change "com.apple.bluetooth.status"
 sketchybar --add event network_refresh
 sketchybar --add event tailscale_refresh
 sketchybar --add event volume_refresh
 
+# On reload, items may already exist (and keep old style props). Remove and re-add
+# so new defaults/style are applied consistently.
 sketchybar --remove launcher >/dev/null 2>&1
+sketchybar --remove front_app >/dev/null 2>&1
+sketchybar --remove network >/dev/null 2>&1
+sketchybar --remove network.status >/dev/null 2>&1
+sketchybar --remove network.ip >/dev/null 2>&1
+sketchybar --remove network.settings >/dev/null 2>&1
+sketchybar --remove tailscale >/dev/null 2>&1
+sketchybar --remove tailscale.state >/dev/null 2>&1
+sketchybar --remove tailscale.tailnet >/dev/null 2>&1
+sketchybar --remove tailscale.ip >/dev/null 2>&1
+sketchybar --remove tailscale.connect >/dev/null 2>&1
+sketchybar --remove tailscale.disconnect >/dev/null 2>&1
+sketchybar --remove tailscale.open >/dev/null 2>&1
+sketchybar --remove bluetooth >/dev/null 2>&1
+sketchybar --remove airpods >/dev/null 2>&1
+sketchybar --remove volume >/dev/null 2>&1
+sketchybar --remove volume.status >/dev/null 2>&1
+sketchybar --remove volume.down >/dev/null 2>&1
+sketchybar --remove volume.up >/dev/null 2>&1
+sketchybar --remove volume.settings >/dev/null 2>&1
+sketchybar --remove battery >/dev/null 2>&1
+sketchybar --remove clock >/dev/null 2>&1
+
+for ws in "${MAIN_WORKSPACES[@]}"; do
+  sketchybar --remove "workspace.$ws" >/dev/null 2>&1
+done
+
+for ws in "${SECONDARY_WORKSPACES[@]}"; do
+  sketchybar --remove "workspace.$ws" >/dev/null 2>&1
+done
+
 sketchybar --add item launcher left \
   --set launcher \
-    icon=󰣇 \
+    icon=":raycast:" \
     label="" \
     icon.color=$ACCENT \
+    icon.font="sketchybar-app-font:Regular:21.0" \
+    icon.y_offset=-1 \
     background.drawing=off \
-    padding_right=10 \
+    padding_right=6 \
     click_script='open -a Raycast'
 
 for ws in "${MAIN_WORKSPACES[@]}"; do
@@ -61,13 +100,16 @@ for ws in "${MAIN_WORKSPACES[@]}"; do
       icon="$ws" \
       label="" \
       label.drawing=on \
-      icon.font="IosevkaTerm Nerd Font Mono:Bold:14.0" \
-      label.font="IosevkaTerm Nerd Font Mono:Semibold:12.0" \
-      background.height=20 \
+      label.y_offset=-1 \
+      icon.font="IosevkaTerm Nerd Font Mono:Bold:19.0" \
+      label.font="sketchybar-app-font:Regular:19.0" \
+      label.padding_left=4 \
+      label.padding_right=10 \
+      background.height=26 \
       update_freq=5 \
       script="$PLUGIN_DIR/aerospace.sh $ws" \
       click_script="aerospace workspace $ws" \
-      background.drawing=on \
+      background.drawing=off \
     --subscribe "workspace.$ws" aerospace_workspace_change front_app_switched
 done
 
@@ -78,25 +120,28 @@ for ws in "${SECONDARY_WORKSPACES[@]}"; do
       icon="$ws" \
       label="" \
       label.drawing=on \
-      icon.font="IosevkaTerm Nerd Font Mono:Bold:14.0" \
-      label.font="IosevkaTerm Nerd Font Mono:Semibold:12.0" \
-      background.height=20 \
+      label.y_offset=-1 \
+      icon.font="IosevkaTerm Nerd Font Mono:Bold:19.0" \
+      label.font="sketchybar-app-font:Regular:19.0" \
+      label.padding_left=4 \
+      label.padding_right=10 \
+      background.height=26 \
       update_freq=5 \
       script="$PLUGIN_DIR/aerospace.sh $ws" \
       click_script="aerospace workspace $ws" \
-      background.drawing=on \
+      background.drawing=off \
     --subscribe "workspace.$ws" aerospace_workspace_change front_app_switched
 done
 
-# Items may already exist on reload; force ordering so launcher is first.
-sketchybar --reorder launcher workspace.1 workspace.2 workspace.3 workspace.4 workspace.5 workspace.A workspace.S
 
 sketchybar --add item front_app center \
   --set front_app \
     display=active \
     icon.color=$ACCENT \
+    icon.font="sketchybar-app-font:Regular:17.0" \
     icon.padding_right=2 \
     label.max_chars=28 \
+    label.font="IosevkaTerm Nerd Font Mono:Semibold:15.0" \
     script="$PLUGIN_DIR/front_app.sh" \
     background.drawing=off \
   --subscribe front_app front_app_switched
@@ -104,6 +149,11 @@ sketchybar --add item front_app center \
 sketchybar --add item network right \
   --set network \
     display=active \
+    icon=􀙇 \
+    icon.color=$ACCENT \
+    icon.font="$SYS_ICON_FONT" \
+    label.font="IosevkaTerm Nerd Font Mono:Semibold:15.0" \
+    background.height=26 \
     update_freq=5 \
     label.max_chars=14 \
     script="$PLUGIN_DIR/network.sh" \
@@ -132,6 +182,10 @@ sketchybar --add item tailscale right \
     update_freq=10 \
     label.max_chars=14 \
     script="$PLUGIN_DIR/tailscale.sh" \
+    icon=􀎛 \
+    icon.font="$SYS_ICON_FONT" \
+    label.font="IosevkaTerm Nerd Font Mono:Semibold:15.0" \
+    background.height=26 \
     click_script='sketchybar --trigger tailscale_refresh; sketchybar --set tailscale popup.drawing=toggle' \
     popup.align=right \
     popup.horizontal=off \
@@ -139,6 +193,31 @@ sketchybar --add item tailscale right \
     popup.background.corner_radius=10 \
     popup.blur_radius=20 \
   --subscribe tailscale system_woke tailscale_refresh
+
+sketchybar --add item bluetooth right \
+  --set bluetooth \
+    display=active \
+    icon="󰂯" \
+    icon.color=$MUTED \
+    label="" \
+    icon.font="IosevkaTerm Nerd Font Mono:Bold:17.0" \
+    label.font="IosevkaTerm Nerd Font Mono:Semibold:15.0" \
+    background.height=26 \
+    script="$PLUGIN_DIR/bluetooth.sh" \
+  --subscribe bluetooth bluetooth_change
+
+sketchybar --add item airpods right \
+  --set airpods \
+    display=active \
+    icon=􀺹 \
+    icon.color=$ACCENT \
+    label="" \
+    drawing=off \
+    icon.font="$SYS_ICON_FONT" \
+    label.font="IosevkaTerm Nerd Font Mono:Semibold:15.0" \
+    background.height=26 \
+    script="$PLUGIN_DIR/airpods_battery.sh" \
+  --subscribe airpods bluetooth_change
 
 sketchybar --add item tailscale.state popup.tailscale \
   --set tailscale.state icon=󰢹 label="Loading..." width=190 label.max_chars=24 background.drawing=on script="$PLUGIN_DIR/tailscale.sh" \
@@ -164,6 +243,10 @@ sketchybar --add item tailscale.open popup.tailscale \
 sketchybar --add item volume right \
   --set volume \
     display=active \
+    icon.color=$ACCENT \
+    icon.font="$SYS_ICON_FONT" \
+    label.font="IosevkaTerm Nerd Font Mono:Semibold:15.0" \
+    background.height=26 \
     script="$PLUGIN_DIR/volume.sh" \
     click_script='sketchybar --trigger volume_refresh; sketchybar --set volume popup.drawing=toggle' \
     popup.align=right \
@@ -177,24 +260,19 @@ sketchybar --add item volume.status popup.volume \
   --set volume.status icon=󰕾 label="Volume" width=150 background.drawing=on script="$PLUGIN_DIR/volume.sh" \
   --subscribe volume.status volume_refresh volume_change
 
-sketchybar --add item volume.down popup.volume \
-  --set volume.down icon=󰝞 label="Lower" width=150 background.drawing=on click_script="$PLUGIN_DIR/volume_control.sh down"
-
-sketchybar --add item volume.up popup.volume \
-  --set volume.up icon=󰝝 label="Raise" width=150 background.drawing=on click_script="$PLUGIN_DIR/volume_control.sh up"
-
 sketchybar --add item volume.settings popup.volume \
   --set volume.settings icon=󰒓 label="Open Sound Settings" width=150 background.drawing=on click_script='open "x-apple.systempreferences:com.apple.Sound-Settings.extension"; sketchybar --set volume popup.drawing=off'
 
 sketchybar --add item battery right \
-  --set battery display=active update_freq=120 script="$PLUGIN_DIR/battery.sh" click_script='open "x-apple.systempreferences:com.apple.Battery-Settings.extension"' \
+  --set battery display=active icon.color=$ACCENT icon.font="$SYS_ICON_FONT" label.font="IosevkaTerm Nerd Font Mono:Semibold:15.0" background.height=26 update_freq=120 script="$PLUGIN_DIR/battery.sh" click_script='open "x-apple.systempreferences:com.apple.Battery-Settings.extension"' \
   --subscribe battery system_woke power_source_change
 
 sketchybar --add item clock right \
-  --set clock display=active update_freq=10 icon=󰥔 script="$PLUGIN_DIR/clock.sh"
+  --set clock display=active icon.color=$ACCENT icon.font="$SYS_ICON_FONT" label.font="IosevkaTerm Nerd Font Mono:Semibold:15.0" background.height=26 update_freq=10 icon=􀐫 script="$PLUGIN_DIR/clock.sh"
 
 sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$(aerospace list-workspaces --focused)"
 sketchybar --trigger network_refresh
 sketchybar --trigger tailscale_refresh
+sketchybar --trigger bluetooth_change
 sketchybar --trigger volume_refresh
 sketchybar --update

@@ -4,5 +4,5 @@
 # the item invoking this script:
 # https://felixkratz.github.io/SketchyBar/config/events#events-and-scripting
 
-sketchybar --set "$NAME" label="$(date '+%d/%m %H:%M')"
-
+# 12-hour clock.
+sketchybar --set "$NAME" label="$(date '+%d/%m %I:%M %p')"

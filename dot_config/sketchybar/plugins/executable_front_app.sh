@@ -9,4 +9,5 @@ fi
 
 ICON=$(icon_map "$APP_NAME")
 
-sketchybar --set "$NAME" icon="$ICON" label="$APP_NAME"
+# Use sketchybar-app-font tokens (e.g. :terminal:).
+sketchybar --set "$NAME" icon="$ICON" icon.font="sketchybar-app-font:Regular:17.0" label="$APP_NAME"
