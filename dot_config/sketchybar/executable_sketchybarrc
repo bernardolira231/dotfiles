@@ -23,8 +23,8 @@ sketchybar --bar \
   padding_right=6
 
 default=(
-  icon.font="IosevkaTerm Nerd Font Mono:Bold:13.0"
-  label.font="IosevkaTerm Nerd Font Mono:Semibold:11.5"
+  icon.font="IosevkaTerm Nerd Font Mono:Bold:14.0"
+  label.font="IosevkaTerm Nerd Font Mono:Semibold:12.0"
   icon.color=$FG
   label.color=$FG
   icon.padding_left=5
@@ -35,7 +35,7 @@ default=(
   padding_right=2
   background.color=$SURFACE_SOFT
   background.corner_radius=6
-  background.height=18
+  background.height=20
 )
 sketchybar --default "${default[@]}"
 
@@ -44,6 +44,7 @@ sketchybar --add event network_refresh
 sketchybar --add event tailscale_refresh
 sketchybar --add event volume_refresh
 
+sketchybar --remove launcher >/dev/null 2>&1
 sketchybar --add item launcher left \
   --set launcher \
     icon=󰣇 \
@@ -60,6 +61,9 @@ for ws in "${MAIN_WORKSPACES[@]}"; do
       icon="$ws" \
       label="" \
       label.drawing=on \
+      icon.font="IosevkaTerm Nerd Font Mono:Bold:14.0" \
+      label.font="IosevkaTerm Nerd Font Mono:Semibold:12.0" \
+      background.height=20 \
       update_freq=5 \
       script="$PLUGIN_DIR/aerospace.sh $ws" \
       click_script="aerospace workspace $ws" \
@@ -74,12 +78,18 @@ for ws in "${SECONDARY_WORKSPACES[@]}"; do
       icon="$ws" \
       label="" \
       label.drawing=on \
+      icon.font="IosevkaTerm Nerd Font Mono:Bold:14.0" \
+      label.font="IosevkaTerm Nerd Font Mono:Semibold:12.0" \
+      background.height=20 \
       update_freq=5 \
       script="$PLUGIN_DIR/aerospace.sh $ws" \
       click_script="aerospace workspace $ws" \
       background.drawing=on \
     --subscribe "workspace.$ws" aerospace_workspace_change front_app_switched
 done
+
+# Items may already exist on reload; force ordering so launcher is first.
+sketchybar --reorder launcher workspace.1 workspace.2 workspace.3 workspace.4 workspace.5 workspace.A workspace.S
 
 sketchybar --add item front_app center \
   --set front_app \
