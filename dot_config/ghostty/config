@@ -9,7 +9,7 @@
 # └──────────────────────────────────────────────────────────────────────────────┘
 
 font-family = IosevkaTerm NF
-font-size = 14
+font-size = 18
 
 
 # ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -50,6 +50,10 @@ keybind = alt+v=new_split:right
 keybind = alt+d=new_split:down
 
 # Split Navigation
+keybind = ctrl+h=unbind
+keybind = ctrl+j=unbind
+keybind = ctrl+k=unbind
+keybind = ctrl+l=unbind
 keybind = alt+k=goto_split:up
 keybind = alt+j=goto_split:down
 keybind = alt+h=goto_split:left
@@ -74,28 +78,28 @@ keybind = alt+s=write_screen_file:paste
 # └──────────────────────────────────────────────────────────────────────────────┘
 
 # --- Base Colors ---
-background = 06080f
-foreground = f3f6f9
-cursor-color = e0c15a
-selection-background = 263356
-selection-foreground = f3f6f9
+background = 191724
+foreground = e0def4
+cursor-color = c4a7e7
+selection-background = 403d52
+selection-foreground = e0def4
 
 # --- Normal Colors ---
-palette = 0=#06080f
-palette = 1=#cb7c94
-palette = 2=#b7cc85
-palette = 3=#ffe066
-palette = 4=#7fb4ca
-palette = 5=#ff8dd7
-palette = 6=#7aa89f
-palette = 7=#f3f6f9
+palette = 0=#26233a
+palette = 1=#eb6f92
+palette = 2=#31748f
+palette = 3=#f6c177
+palette = 4=#9ccfd8
+palette = 5=#c4a7e7
+palette = 6=#ebbcba
+palette = 7=#e0def4
 
 # --- Bright Colors ---
-palette = 8=#8a8fa3
-palette = 9=#de8fa8
-palette = 10=#d1e8a9
-palette = 11=#fff7b1
-palette = 12=#a3d4d5
-palette = 13=#ffaeea
-palette = 14=#7fb4ca
-palette = 15=#f3f6f9
+palette = 8=#6e6a86
+palette = 9=#eb6f92
+palette = 10=#31748f
+palette = 11=#f6c177
+palette = 12=#9ccfd8
+palette = 13=#c4a7e7
+palette = 14=#ebbcba
+palette = 15=#e0def4

@@ -1,0 +1,16 @@
+{
+  "Box Component": {
+    "prefix": "Box",
+    "body": [
+      "<Box>$0</Box>"
+    ],
+    "description": "Expand to a Box JSX element"
+  },
+  "Text Component": {
+    "prefix": "Text",
+    "body": [
+      "<Text>$0</Text>"
+    ],
+    "description": "Expand to a Text JSX element"
+  }
+}
