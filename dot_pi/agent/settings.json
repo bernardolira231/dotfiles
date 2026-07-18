@@ -1,11 +1,9 @@
 {
-  "defaultModel": "gpt-5.5",
+  "defaultModel": "gpt-5.6-sol",
   "defaultProvider": "openai-codex",
-  "defaultThinkingLevel": "medium",
-  "lastChangelogVersion": "0.80.6",
+  "defaultThinkingLevel": "low",
   "packages": [
     "npm:gentle-pi",
-    "npm:gentle-engram",
     "npm:pi-intercom",
     "npm:@juicesharp/rpiv-ask-user-question",
     "npm:pi-web-access",

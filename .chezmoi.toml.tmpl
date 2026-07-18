@@ -1,0 +1,6 @@
+[data]
+{{- if eq .chezmoi.os "darwin" }}
+profile = "macos"
+{{- else }}
+profile = {{ promptStringOnce . "profile" "Machine profile (use 'omarchy' for Omarchy)" "omarchy" | quote }}
+{{- end }}

@@ -1,6 +1,8 @@
 onboarding = false
+# Herdr configuration managed by chezmoi.
 
 [theme]
+# Keep Herdr aligned with the terminal and editor theme.
 name = "rose-pine"
 
 [theme.custom]
@@ -15,6 +17,7 @@ yellow = "#f6c177"
 accent = "#c4a7e7"
 
 [keys]
+# Match tmux-style prefix muscle memory.
 prefix = "ctrl+a"
 previous_agent = "prefix+alt+k"
 next_agent = "prefix+alt+j"
@@ -44,3 +47,6 @@ key = "ctrl+l"
 type = "plugin_action"
 command = "vim-herdr-navigation.right"
 description = "navigate right (vim/herdr)"
+
+[ui.toast]
+delivery = "herdr"

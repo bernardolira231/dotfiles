@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+{{- $profile := index . "profile" | default (ternary "macos" "omarchy" (eq .chezmoi.os "darwin")) }}
+{{- if ne $profile "omarchy" }}
+exit 0
+{{- end }}
+
+set -euo pipefail
+
+if [[ "$(uname -s)" != "Linux" || ! -r /etc/os-release ]]; then
+  echo "Omarchy setup requires Linux with /etc/os-release." >&2
+  exit 1
+fi
+
+# shellcheck disable=SC1091
+source /etc/os-release
+if [[ "${ID:-}" != "arch" && " ${ID_LIKE:-} " != *" arch "* ]]; then
+  echo "Omarchy setup requires Arch Linux; detected ID=${ID:-unknown}." >&2
+  exit 1
+fi
+
+if [[ ! -d "$HOME/.local/share/omarchy" ]] && ! command -v omarchy-version >/dev/null 2>&1; then
+  echo "The 'omarchy' profile requires an Omarchy installation." >&2
+  echo "Install or repair Omarchy first, then run 'chezmoi apply' again." >&2
+  exit 1
+fi
+
+# Ghostty, Neovim, Git, and Zsh are Omarchy-owned. Do not install parallel copies.
+for command_name in ghostty nvim git zsh; do
+  if ! command -v "$command_name" >/dev/null 2>&1; then
+    echo "Missing Omarchy-owned command '$command_name'. Repair/update Omarchy, then retry." >&2
+    exit 1
+  fi
+done
+
+declare -a packages=()
+declare -a requirements=(
+  "jq:jq"
+  "tmux:tmux"
+  "fzf:fzf"
+  "zoxide:zoxide"
+  "atuin:atuin"
+  "rg:ripgrep"
+  "fd:fd"
+  "lazygit:lazygit"
+  "node:nodejs"
+  "npm:npm"
+  "bun:bun"
+  "shfmt:shfmt"
+  "stylua:stylua"
+  "eza:eza"
+  "bat:bat"
+)
+
+for requirement in "${requirements[@]}"; do
+  command_name="${requirement%%:*}"
+  package_name="${requirement##*:}"
+  if command -v "$command_name" >/dev/null 2>&1 || pacman -Q "$package_name" >/dev/null 2>&1; then
+    continue
+  fi
+  if ! pacman -Si "$package_name" >/dev/null 2>&1; then
+    echo "Required package '$package_name' is unavailable in configured pacman repositories." >&2
+    echo "Enable a trusted Arch repository that provides it, then retry; no AUR installer was guessed." >&2
+    exit 1
+  fi
+  packages+=("$package_name")
+done
+
+if ((${#packages[@]})); then
+  sudo pacman -S --needed --noconfirm "${packages[@]}"
+fi
+
+if [[ -e "$HOME/.oh-my-zsh" && ! -d "$HOME/.oh-my-zsh/.git" ]]; then
+  echo "Cannot install Oh My Zsh: $HOME/.oh-my-zsh exists but is not a Git checkout." >&2
+  echo "Move or remove that directory after reviewing its contents, then rerun 'chezmoi apply'." >&2
+  exit 1
+elif [[ ! -d "$HOME/.oh-my-zsh/.git" ]]; then
+  git clone --depth 1 https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh"
+fi
+
+if [[ ! -d "$HOME/.tmux/plugins/tpm/.git" ]]; then
+  git clone --depth 1 https://github.com/tmux-plugins/tpm.git "$HOME/.tmux/plugins/tpm"
+fi
+
+declare -a missing_local_tools=()
+for command_name in claude opencode pi herdr gentle-ai engram codegraph; do
+  command -v "$command_name" >/dev/null 2>&1 || missing_local_tools+=("$command_name")
+done
+
+if ((${#missing_local_tools[@]})); then
+  printf 'Missing local/proprietary tools:' >&2
+  printf ' %s' "${missing_local_tools[@]}" >&2
+  printf '\nInstall them using their verified vendor/project instructions, authenticate manually, then rerun chezmoi apply.\n' >&2
+  exit 1
+fi
+
+plugin_dir="$HOME/.local/share/herdr-plugins/vim-herdr-navigation"
+if [[ "$(herdr plugin list 2>/dev/null || true)" != *"vim-herdr-navigation"* ]]; then
+  herdr plugin link "$plugin_dir"
+fi
+
+# Herdr owns these generated files; reinstalling is safe and keeps them current.
+for integration in claude opencode pi; do
+  herdr integration install "$integration"
+done
+
+echo "Omarchy dotfiles setup complete. Authenticate Claude Code, OpenCode, and Pi manually."
