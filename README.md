@@ -18,7 +18,9 @@ versioned here: install gentle-ai separately and let it generate them.
 
 ```sh
 xcode-select --install
-brew install chezmoi   # or: sh -c "$(curl -fsLS get.chezmoi.io)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+brew install chezmoi
 chezmoi init bernardolira231/dotfiles
 chezmoi diff
 bash "$(chezmoi source-path)/bootstrap.sh"

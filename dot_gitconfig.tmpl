@@ -1,9 +1,9 @@
 [user]
 	name = Bernardo Lira
 	email = harritolira@gmail.com
-	signingkey = /Users/bernardolira/.ssh/id_rsa
+	signingkey = {{ .chezmoi.homeDir }}/.ssh/id_rsa
 [core]
-	excludesfile = /Users/bernardolira/.gitignore_global
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
 	editor = windsurf --wait
 	autocrlf = input
 	sshCommand = "ssh -i ~/.ssh/id_rsa"
