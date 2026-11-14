@@ -21,6 +21,11 @@ if ! brew bundle --file="$SOURCE_DIR/Brewfile"; then
   echo "WARNING: some Brewfile entries failed. Continuing; re-run bootstrap later to retry them." >&2
 fi
 
+if [[ ! -x "$HOME/.local/bin/claude" ]]; then
+  echo "==> Installing Claude Code"
+  curl -fsSL https://claude.ai/install.sh | bash || echo "WARNING: Claude Code install failed." >&2
+fi
+
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   echo "==> Installing Oh My Zsh"
   RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
