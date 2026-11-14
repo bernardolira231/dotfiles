@@ -1,15 +1,11 @@
-{{- $profile := index . "profile" | default (ternary "macos" "omarchy" (eq .chezmoi.os "darwin")) }}
+# Destination paths. Repository-only files are never deployed to $HOME.
+README.md
+Brewfile
+bootstrap.sh
+odd
+odd/**
 
-# Destination paths only. Source-only exclusions belong in .gitignore.
+**/.DS_Store
 .ssh/**
 **/.env
 **/.env.*
-**/.DS_Store
-**/*.swp
-**/*.swo
-
-{{- if eq $profile "omarchy" }}
-.aerospace.toml
-.config/sketchybar/**
-.wezterm.lua
-{{- end }}

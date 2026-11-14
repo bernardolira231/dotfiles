@@ -1,8 +1,0 @@
-{
-  "name": "bernardo-snippets",
-  "contributes": {
-    "snippets": [
-      { "language": ["typescriptreact", "javascriptreact"], "path": "./react.json" }
-    ]
-  }
-}
