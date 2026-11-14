@@ -24,7 +24,6 @@ brew "fastfetch"
 brew "fd"
 # Command-line fuzzy finder written in Go
 brew "fzf"
-# Tool to install, manage and use Progressive Web Apps in Mozilla Firefox
 # GitHub command-line tool
 brew "gh"
 # Distributed revision control system
@@ -75,7 +74,6 @@ brew "zsh-autocomplete"
 brew "zsh-autosuggestions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
-# The modern, text-based browser
 # A window border system for macOS
 brew "felixkratz/formulae/borders"
 # Custom macOS statusbar with shell plugin, interaction and graph support
@@ -92,7 +90,6 @@ cask "nikitabobko/tap/aerospace"
 cask "codexbar"
 # Developer platform
 cask "dotnet-sdk"
-# Web browser
 cask "font-cascadia-code-pl"
 cask "font-hack-nerd-font"
 cask "font-sf-pro"
@@ -102,7 +99,6 @@ cask "font-victor-mono"
 cask "ghostty"
 # Control your tools with a few keystrokes
 cask "raycast"
-# Tool that provides consistent, highly configurable symbols for apps
 npm "@colbymchenry/codegraph"
 npm "@google/gemini-cli"
 npm "@openai/codex"
