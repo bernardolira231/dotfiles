@@ -102,5 +102,6 @@ cask "ghostty"
 # Control your tools with a few keystrokes
 cask "raycast"
 npm "@colbymchenry/codegraph"
+npm "@earendil-works/pi-coding-agent"
 npm "@google/gemini-cli"
 npm "@openai/codex"
