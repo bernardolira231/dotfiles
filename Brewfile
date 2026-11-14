@@ -8,7 +8,7 @@ tap "steipete/tap", trusted: { casks: ["codexbar"] }
 # Improved shell history for zsh, bash, fish and nushell
 brew "atuin"
 # Microsoft Azure CLI 2.0
-brew "azure-cli"
+cask "azure-cli"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Multi-shell multi-command argument completer

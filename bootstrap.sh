@@ -17,7 +17,9 @@ fi
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 echo "==> Installing packages from Brewfile"
-brew bundle --file="$SOURCE_DIR/Brewfile"
+if ! brew bundle --file="$SOURCE_DIR/Brewfile"; then
+  echo "WARNING: some Brewfile entries failed. Continuing; re-run bootstrap later to retry them." >&2
+fi
 
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
   echo "==> Installing Oh My Zsh"
