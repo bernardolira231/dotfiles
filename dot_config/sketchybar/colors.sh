@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+# Rosé Pine Main
+RP_BASE=0xff191724
+RP_SURFACE=0xff1f1d2e
+RP_OVERLAY=0xff26233a
+RP_MUTED=0xff6e6a86
+RP_SUBTLE=0xff908caa
+RP_TEXT=0xffe0def4
+RP_LOVE=0xffeb6f92
+RP_GOLD=0xfff6c177
+RP_ROSE=0xffebbcba
+RP_PINE=0xff31748f
+RP_FOAM=0xff9ccfd8
+RP_IRIS=0xffc4a7e7
+RP_HIGHLIGHT_LOW=0xff21202e
+RP_HIGHLIGHT_MEDIUM=0xff403d52
+RP_HIGHLIGHT_HIGH=0xff524f67
+
+# Translucent variants retain the official palette RGB values.
+RP_SURFACE_SOFT=0xe61f1d2e
+RP_OVERLAY_SOFT=0xe626233a
+RP_POPUP_BASE=0xf2191724

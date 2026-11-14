@@ -1,0 +1,243 @@
+#!/bin/bash
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+MAIN_WORKSPACES=(1 2 3 4 5)
+SECONDARY_WORKSPACES=(A S F)
+WORKSPACES=("${MAIN_WORKSPACES[@]}" "${SECONDARY_WORKSPACES[@]}")
+
+source "$CONFIG_DIR/colors.sh"
+
+sketchybar --bar \
+  position=top \
+  height=40 \
+  blur_radius=0 \
+  color=0x00000000 \
+  corner_radius=0 \
+  y_offset=0 \
+  margin=0 \
+  padding_left=6 \
+  padding_right=6
+
+default=(
+  icon.font="IosevkaTerm Nerd Font Mono:Bold:16.0"
+  label.font="IosevkaTerm Nerd Font Mono:Semibold:14.0"
+  icon.color=$RP_TEXT
+  label.color=$RP_TEXT
+  icon.padding_left=8
+  icon.padding_right=3
+  label.padding_left=3
+  label.padding_right=8
+  padding_left=4
+  padding_right=4
+  background.color=$RP_SURFACE_SOFT
+  background.border_color=$RP_HIGHLIGHT_MEDIUM
+  background.border_width=1
+  background.corner_radius=9
+  background.height=31
+)
+sketchybar --default "${default[@]}"
+
+# System icons with SF Symbols.
+SYS_ICON_FONT="SF Pro:Semibold:15.0"
+
+sketchybar --add event aerospace_workspace_change
+sketchybar --add event network_refresh
+sketchybar --add event volume_refresh
+
+sketchybar --add item workspace_state_watcher left \
+  --set workspace_state_watcher drawing=off script="$PLUGIN_DIR/workspace_refresh.sh" \
+  --subscribe workspace_state_watcher aerospace_workspace_change system_woke
+
+# On reload, items may already exist (and keep old style props). Remove and re-add
+# so new defaults/style are applied consistently.
+sketchybar --remove launcher >/dev/null 2>&1
+sketchybar --remove front_app >/dev/null 2>&1
+sketchybar --remove workspace_separator >/dev/null 2>&1
+sketchybar --remove cpu >/dev/null 2>&1
+sketchybar --remove ram >/dev/null 2>&1
+sketchybar --remove gpu >/dev/null 2>&1
+sketchybar --remove network >/dev/null 2>&1
+sketchybar --remove network.status >/dev/null 2>&1
+sketchybar --remove network.ip >/dev/null 2>&1
+sketchybar --remove network.settings >/dev/null 2>&1
+sketchybar --remove tailscale >/dev/null 2>&1
+sketchybar --remove tailscale.state >/dev/null 2>&1
+sketchybar --remove tailscale.tailnet >/dev/null 2>&1
+sketchybar --remove tailscale.ip >/dev/null 2>&1
+sketchybar --remove tailscale.connect >/dev/null 2>&1
+sketchybar --remove tailscale.disconnect >/dev/null 2>&1
+sketchybar --remove tailscale.open >/dev/null 2>&1
+sketchybar --remove bluetooth >/dev/null 2>&1
+sketchybar --remove airpods >/dev/null 2>&1
+sketchybar --remove volume >/dev/null 2>&1
+sketchybar --remove volume.status >/dev/null 2>&1
+sketchybar --remove volume.down >/dev/null 2>&1
+sketchybar --remove volume.up >/dev/null 2>&1
+sketchybar --remove volume.settings >/dev/null 2>&1
+sketchybar --remove battery >/dev/null 2>&1
+sketchybar --remove clock >/dev/null 2>&1
+
+for ws in "${WORKSPACES[@]}"; do
+  sketchybar --remove "workspace.$ws" >/dev/null 2>&1
+  sketchybar --remove "workspace_gap.$ws" >/dev/null 2>&1
+done
+
+add_workspace() {
+  local ws="$1"
+  local display="$2"
+  local add_gap="$3"
+
+  sketchybar --add item "workspace.$ws" left \
+    --set "workspace.$ws" \
+      display="$display" \
+      width=35 \
+      icon="$ws" \
+      label="" \
+      label.drawing=off \
+      icon.font="IosevkaTerm Nerd Font Mono:Bold:16.0" \
+      icon.align=center \
+      icon.padding_left=9 \
+      icon.padding_right=9 \
+      padding_left=0 \
+      padding_right=0 \
+      background.height=35 \
+      background.corner_radius=9 \
+      background.color=$RP_SURFACE_SOFT \
+      background.border_color=$RP_HIGHLIGHT_MEDIUM \
+      background.border_width=1 \
+      click_script="aerospace focus-monitor $display && aerospace workspace $ws" \
+      background.drawing=on \
+    --subscribe "workspace.$ws" aerospace_workspace_change
+
+  if [ "$add_gap" = true ]; then
+    sketchybar --add item "workspace_gap.$ws" left \
+      --set "workspace_gap.$ws" \
+        display="$display" \
+        width=4 \
+        icon.drawing=off \
+        label.drawing=off \
+        padding_left=0 \
+        padding_right=0 \
+        background.drawing=off \
+        drawing=on \
+        updates=off
+  fi
+}
+
+for ws in "${MAIN_WORKSPACES[@]}"; do
+  if [ "$ws" = 5 ]; then
+    add_workspace "$ws" 1 false
+  else
+    add_workspace "$ws" 1 true
+  fi
+done
+
+add_workspace A 2 true
+add_workspace S 2 true
+add_workspace F 2 false
+
+sketchybar --add item workspace_separator left \
+  --set workspace_separator \
+    icon=􀆊 \
+    icon.font="SF Pro:Semibold:13.0" \
+    icon.color=$RP_MUTED \
+    icon.padding_left=7 \
+    icon.padding_right=7 \
+    label.drawing=off \
+    padding_left=6 \
+    padding_right=4 \
+    background.drawing=off
+
+sketchybar --add item front_app left \
+  --set front_app \
+    display=active \
+    icon.font="sketchybar-app-font:Regular:16.0" \
+    icon.color=$RP_ROSE \
+    icon="" \
+    label="" \
+    label.max_chars=28 \
+    label.font="IosevkaTerm Nerd Font Mono:Bold:14.0" \
+    label.color=$RP_TEXT \
+    padding_left=5 \
+    padding_right=5 \
+    background.height=31 \
+    background.color=$RP_OVERLAY_SOFT \
+    background.border_color=$RP_ROSE \
+    background.border_width=1 \
+    script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
+
+sketchybar --add item network right \
+  --set network \
+    display=active \
+    icon=􀙇 \
+    icon.color=$RP_SUBTLE \
+    label.color=$RP_SUBTLE \
+    icon.font="$SYS_ICON_FONT" \
+    width=dynamic \
+    icon.padding_left=5 \
+    icon.padding_right=3 \
+    label.padding_left=3 \
+    label.padding_right=6 \
+    label.font="IosevkaTerm Nerd Font Mono:Semibold:14.0" \
+    update_freq=5 \
+    label.max_chars=14 \
+    script="$PLUGIN_DIR/network.sh" \
+    click_script='sketchybar --trigger network_refresh; sketchybar --set network popup.drawing=toggle' \
+    popup.align=right \
+    popup.horizontal=off \
+    popup.background.color=$RP_POPUP_BASE \
+    popup.background.corner_radius=10 \
+    popup.blur_radius=20 \
+  --subscribe network wifi_change system_woke network_refresh
+
+sketchybar --add item network.status popup.network \
+  --set network.status icon=󰖩 icon.color=$RP_PINE label="Loading..." width=190 label.max_chars=24 background.drawing=on script="$PLUGIN_DIR/network.sh" \
+  --subscribe network.status network_refresh
+
+sketchybar --add item network.ip popup.network \
+  --set network.ip icon=󰩟 icon.color=$RP_FOAM label="-" width=190 label.max_chars=24 background.drawing=on script="$PLUGIN_DIR/network.sh" \
+  --subscribe network.ip network_refresh
+
+sketchybar --add item network.settings popup.network \
+  --set network.settings icon=󰒓 icon.color=$RP_SUBTLE label="Open Network Settings" width=190 background.drawing=on click_script='open "x-apple.systempreferences:com.apple.Network-Settings.extension"; sketchybar --set network popup.drawing=off'
+
+sketchybar --add item volume right \
+  --set volume \
+    display=active \
+    icon.color=$RP_SUBTLE \
+    label.color=$RP_SUBTLE \
+    icon.font="$SYS_ICON_FONT" \
+    width=dynamic \
+    icon.padding_left=5 \
+    icon.padding_right=3 \
+    label.padding_left=3 \
+    label.padding_right=6 \
+    label.font="IosevkaTerm Nerd Font Mono:Semibold:14.0" \
+    script="$PLUGIN_DIR/volume.sh" \
+    click_script='sketchybar --trigger volume_refresh; sketchybar --set volume popup.drawing=toggle' \
+    popup.align=right \
+    popup.horizontal=off \
+    popup.background.color=$RP_POPUP_BASE \
+    popup.background.corner_radius=10 \
+    popup.blur_radius=20 \
+  --subscribe volume volume_change volume_refresh
+
+sketchybar --add item volume.status popup.volume \
+  --set volume.status icon=󰕾 icon.color=$RP_FOAM label="Volume" width=150 background.drawing=on script="$PLUGIN_DIR/volume.sh" \
+  --subscribe volume.status volume_refresh volume_change
+
+sketchybar --add item volume.settings popup.volume \
+  --set volume.settings icon=󰒓 icon.color=$RP_SUBTLE label="Open Sound Settings" width=150 background.drawing=on click_script='open "x-apple.systempreferences:com.apple.Sound-Settings.extension"; sketchybar --set volume popup.drawing=off'
+
+sketchybar --add item clock right \
+  --set clock display=active width=dynamic icon.color=$RP_SUBTLE label.color=$RP_SUBTLE icon.font="$SYS_ICON_FONT" icon.padding_left=5 icon.padding_right=3 label.font="IosevkaTerm Nerd Font Mono:Semibold:14.0" label.padding_left=3 label.padding_right=6 update_freq=10 icon=􀐫 script="$PLUGIN_DIR/clock.sh"
+
+sketchybar --move clock after volume \
+  --move network after clock
+
+sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$(aerospace list-workspaces --focused)"
+sketchybar --trigger network_refresh
+sketchybar --trigger volume_refresh
+"$PLUGIN_DIR/front_app.sh"
+sketchybar --update
