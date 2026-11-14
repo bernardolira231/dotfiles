@@ -90,7 +90,6 @@ cask "codexbar"
 # Developer platform
 cask "dotnet-sdk"
 # Web browser
-cask "firefox"
 cask "font-cascadia-code-pl"
 cask "font-hack-nerd-font"
 cask "font-sf-pro"
@@ -101,7 +100,6 @@ cask "ghostty"
 # Control your tools with a few keystrokes
 cask "raycast"
 # Tool that provides consistent, highly configurable symbols for apps
-cask "sf-symbols"
 npm "@colbymchenry/codegraph"
 npm "@google/gemini-cli"
 npm "@openai/codex"
