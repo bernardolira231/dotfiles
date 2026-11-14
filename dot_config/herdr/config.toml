@@ -1,0 +1,61 @@
+onboarding = false
+# herdr configuration managed by Gentleman.Dots.
+# This file is copied into ~/.config/herdr/config.toml during Home Manager activation.
+
+[theme]
+# Keep Herdr aligned with the main terminal/editor theme.
+name = "rose-pine"
+
+[theme.custom]
+panel_bg = "#191724"
+accent = "#c4a7e7"
+green = "#31748f"
+blue = "#9ccfd8"
+red = "#eb6f92"
+yellow = "#f6c177"
+
+[ui]
+accent = "#c4a7e7"
+
+[keys]
+# Match tmux/Zellij-style prefix muscle memory.
+prefix = "ctrl+a"
+
+# Move between agents in the sidebar.
+# Avoid Herdr's built-in prefix+shift+j/k pane-swap bindings.
+previous_agent = "prefix+alt+k"
+next_agent = "prefix+alt+j"
+
+# Jump straight to agent N (1..9) as listed in the sidebar.
+# Use Ctrl after the prefix: Alt+number is owned by skhd/yabai spaces,
+# and Shift+number did not reach Herdr reliably in the current terminal setup.
+focus_agent = "prefix+ctrl+1..9"
+
+split_horizontal = "prefix+d"
+
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "vim-herdr-navigation.left"
+description = "navigate left (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "vim-herdr-navigation.down"
+description = "navigate down (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "vim-herdr-navigation.up"
+description = "navigate up (vim/herdr)"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "vim-herdr-navigation.right"
+description = "navigate right (vim/herdr)"
+
+[ui.toast]
+delivery = "herdr"
