@@ -16,14 +16,14 @@ Branch: `feat/mac-only-v2` (archive tag `archive/v1-macos-omarchy`). Delivery: p
 
 | ID | Specs | Task | Route | Status | Commit |
 |----|-------|------|-------|--------|--------|
-| T1 | S1 | Archive tag + branch, clear old source tree, base metadata (ignores, README) | inline | in progress | |
-| T2 | S1,S6 | Shell: zshrc, zprofile, p10k | inline | todo | |
-| T3 | S3,S6 | Terminal: Ghostty, Herdr, tmux | inline | todo | |
-| T4 | S6 | Desktop: AeroSpace, SketchyBar, borders, Karabiner | inline | todo | |
-| T5 | S6 | Dev: Neovim, lazygit, git | inline | todo | |
-| T6 | S4,S5 | AI personal settings (Risk: item 2, secrets in a public repo) | inline | todo | |
-| T7 | S1 | Brewfile + bootstrap for a new Mac (Risk: item 5, installers) | inline | todo | |
-| T8 | S5 | Verify: secret scan, empty diff vs live, dry-run in scratch HOME | inline | todo | |
+| T1 | S1 | Archive tag + branch, clear old source tree, base metadata (ignores, README) | inline | done | 312b942 |
+| T2 | S1,S6 | Shell: zshrc, zprofile, p10k | inline | done | 5df0c80 |
+| T3 | S3,S6 | Terminal: Ghostty, Herdr, tmux | inline | done | 95ada3c |
+| T4 | S6 | Desktop: AeroSpace, SketchyBar, borders, Karabiner | inline | done | ef93c20 |
+| T5 | S6 | Dev: Neovim, lazygit, git | inline | done | 55808c5 |
+| T6 | S4,S5 | AI personal settings (Risk: item 2, secrets in a public repo) | inline | done | 7d59eb5 |
+| T7 | S1 | Brewfile + bootstrap for a new Mac (Risk: item 5, installers) | inline | done | 78db611 |
+| T8 | S5 | Verify: secret scan, empty diff vs live, dry-run in scratch HOME | inline | done | (checks only) |
 | T9 | S1 | Install the MacBook from the repo (blocked until it arrives) | inline | blocked | |
 
 ## Log
@@ -31,3 +31,7 @@ Branch: `feat/mac-only-v2` (archive tag `archive/v1-macos-omarchy`). Delivery: p
 - L1 (2026-11-14) User: "yo diria de borrar los dotfiles actuales y empezar de cero, ahora enfocado en que funcione de mac a mac"
 - L2 Decisions: Omarchy out (S2), tmux kept (S3), AI config only, without gentle-ai assets (S4).
 - L3 Evidence: the old repo had drift vs live (sketchybarrc and plugins); README.md was being deployed to ~/README.md (it was not ignored). `git fetch` failed (no SSH key loaded in this session), so the branch is based on local master, which matched origin/master at last sync.
+- L4 T6 scope: kept ~/.claude/settings.json, statusline.sh and ~/.pi/agent/settings.json. Excluded as gentle-ai generated: CLAUDE.md, output-styles, themes, skills, agents, commands, opencode.json (which embeds gentle-ai agent prompts; its model choices must be re-applied after gentle-ai setup). Herdr plugin dir vim-herdr-navigation is empty on the live Mac, so the Herdr plugin_action bindings need the plugin reinstalled (not versioned).
+- L5 Brewfile is a dump of the live Mac minus wezterm (S3) and gentle-ai (S4). Unused-looking casks (amethyst, warp) were kept pending user review.
+- L6 Verification (2026-11-14): `bash -n bootstrap.sh` OK; `chezmoi diff` vs live is empty; `chezmoi apply --destination <mktemp>` deployed 53 files (scratch removed); secret pattern scan over 59 tracked files found no matches, and no risky filenames. `brew bundle check` OK.
+- L7 Next: the user decides on delivery (push the feature branch / replace master on the PUBLIC repo; the SSH key was not loaded in this session). T9 runs when the MacBook arrives.
