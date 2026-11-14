@@ -1,4 +1,3 @@
-tap "browsh-org/browsh"
 tap "cloudflare/cloudflare", trusted: true
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", trusted: true
 tap "gentleman-programming/tap", "https://github.com/Gentleman-Programming/homebrew-tap", trusted: true
@@ -22,7 +21,6 @@ brew "cloudflared"
 # Like neofetch, but much faster because written mostly in C
 brew "fastfetch"
 # Tool to install, manage and use Progressive Web Apps in Mozilla Firefox
-brew "firefoxpwa"
 # GitHub command-line tool
 brew "gh"
 # Distributed revision control system
@@ -72,7 +70,6 @@ brew "zsh-autosuggestions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
 # The modern, text-based browser
-brew "browsh-org/browsh/browsh", trusted: true
 # A window border system for macOS
 brew "felixkratz/formulae/borders"
 # Custom macOS statusbar with shell plugin, interaction and graph support
