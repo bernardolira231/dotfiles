@@ -2,9 +2,7 @@
   "defaultModel": "gpt-5.6-sol",
   "defaultProvider": "openai-codex",
   "defaultThinkingLevel": "low",
-  "lastChangelogVersion": "1.4.0",
   "packages": [
-    "npm:gentle-pi",
     "npm:pi-intercom",
     "npm:pi-web-access",
     "npm:pi-lens",
