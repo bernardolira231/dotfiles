@@ -66,6 +66,8 @@ brew "sqlcmd"
 brew "stylua"
 # Terminal multiplexer
 brew "tmux"
+# Parser generator tool (nvim-treesitter needs the CLI)
+brew "tree-sitter-cli"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
 # Real-time type-ahead completion for Zsh

@@ -34,12 +34,19 @@ fi
 echo "==> Applying dotfiles"
 chezmoi apply
 
+echo "==> Installing tmux plugins"
+"$HOME/.tmux/plugins/tpm/bin/install_plugins" || echo "WARNING: tmux plugin install failed; press prefix + I inside tmux." >&2
+
+if command -v herdr >/dev/null 2>&1 && ! herdr plugin list 2>/dev/null | grep -q 'vim-herdr-navigation'; then
+  echo "==> Installing herdr navigation plugin"
+  herdr plugin install paulbkim-dev/vim-herdr-navigation --yes || echo "WARNING: herdr plugin install failed." >&2
+fi
+
 cat <<'EOF'
 
 Done. Manual steps:
   - Install gentle-ai and run its setup (skills, agents, CLAUDE.md, OpenCode config).
   - Install apps not in Homebrew: Karabiner-Elements, Jump Desktop Connect, Tailscale.
   - Log in to Claude Code, OpenCode, Pi, GitHub (gh auth login) and Tailscale.
-  - In tmux press prefix + I to install plugins.
   - Open AeroSpace once: it starts SketchyBar and borders on launch.
 EOF
