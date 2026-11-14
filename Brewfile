@@ -1,3 +1,4 @@
+tap "anomalyco/tap", trusted: true
 tap "cloudflare/cloudflare", trusted: true
 tap "felixkratz/formulae", "https://github.com/FelixKratz/homebrew-formulae", trusted: true
 tap "gentleman-programming/tap", "https://github.com/Gentleman-Programming/homebrew-tap", trusted: true
@@ -76,6 +77,8 @@ brew "zsh-autocomplete"
 brew "zsh-autosuggestions"
 # Fish shell like syntax highlighting for zsh
 brew "zsh-syntax-highlighting"
+# OpenCode V2 - the AI coding agent for the terminal
+brew "anomalyco/tap/opencode-v2"
 # A window border system for macOS
 brew "felixkratz/formulae/borders"
 # Custom macOS statusbar with shell plugin, interaction and graph support
