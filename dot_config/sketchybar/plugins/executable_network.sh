@@ -9,7 +9,12 @@ ICON="󰖩"
 LABEL="Offline"
 
 if [ -n "$DEFAULT_IF" ] && [ "$DEFAULT_IF" = "$WIFI_DEVICE" ]; then
-  SSID=$(networksetup -getairportnetwork "$WIFI_DEVICE" 2>/dev/null | sed 's/^Current Wi-Fi Network: //')
+  # macOS hides the SSID without Location Services permission; fall back to "Wi-Fi".
+  SSID=$(networksetup -getairportnetwork "$WIFI_DEVICE" 2>/dev/null | sed -n 's/^Current Wi-Fi Network: //p')
+  if [ -z "$SSID" ]; then
+    SSID=$(ipconfig getsummary "$WIFI_DEVICE" 2>/dev/null | awk -F ' : ' '/ SSID : /{print $2; exit}')
+    [ "$SSID" = "<redacted>" ] && SSID=""
+  fi
   ICON="󰖩"
   LABEL=${SSID:-Wi-Fi}
 elif [ -n "$DEFAULT_IF" ] && [ "$DEFAULT_IF" = "$ETH_DEVICE" ]; then
