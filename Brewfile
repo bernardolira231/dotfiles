@@ -20,6 +20,10 @@ brew "cliclick"
 brew "cloudflared"
 # Like neofetch, but much faster because written mostly in C
 brew "fastfetch"
+# Simple, fast and user-friendly alternative to find
+brew "fd"
+# Command-line fuzzy finder written in Go
+brew "fzf"
 # Tool to install, manage and use Progressive Web Apps in Mozilla Firefox
 # GitHub command-line tool
 brew "gh"
@@ -51,6 +55,8 @@ brew "powerlevel10k"
 brew "prettier"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.13"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
 # Intuitive find & replace CLI
 brew "sd"
 # Autoformat shell script source code
