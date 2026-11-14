@@ -85,8 +85,6 @@ brew "gentleman-programming/tap/gga", trusted: true
 brew "rjyo/moshi/moshi-hook"
 # AeroSpace is an i3-like tiling window manager for macOS
 cask "nikitabobko/tap/aerospace"
-# Automatic tiling window manager similar to xmonad
-cask "amethyst"
 # Menu bar app for tracking agentic coding limits and usage
 cask "codexbar"
 # Developer platform
@@ -104,8 +102,6 @@ cask "ghostty"
 cask "raycast"
 # Tool that provides consistent, highly configurable symbols for apps
 cask "sf-symbols"
-# Rust-based terminal
-cask "warp"
 npm "@colbymchenry/codegraph"
 npm "@google/gemini-cli"
 npm "@openai/codex"
