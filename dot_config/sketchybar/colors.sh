@@ -17,7 +17,8 @@ RP_HIGHLIGHT_LOW=0xff21202e
 RP_HIGHLIGHT_MEDIUM=0xff403d52
 RP_HIGHLIGHT_HIGH=0xff524f67
 
-# Translucent variants retain the official palette RGB values.
-RP_SURFACE_SOFT=0xe61f1d2e
-RP_OVERLAY_SOFT=0xe626233a
-RP_POPUP_BASE=0xf2191724
+# OLED: pills and popups use pure black so those pixels stay off.
+# Rose Pine originals: SURFACE_SOFT=0xe61f1d2e OVERLAY_SOFT=0xe626233a POPUP_BASE=0xf2191724
+RP_SURFACE_SOFT=0xff000000
+RP_OVERLAY_SOFT=0xff000000
+RP_POPUP_BASE=0xff000000
