@@ -69,6 +69,8 @@ brew "stylua"
 brew "tmux"
 # Parser generator tool (nvim-treesitter needs the CLI)
 brew "tree-sitter-cli"
+# Build Server Protocol bridge so sourcekit-lsp understands Xcode projects
+brew "xcode-build-server"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
 # Real-time type-ahead completion for Zsh
