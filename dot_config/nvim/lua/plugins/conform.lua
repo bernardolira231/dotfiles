@@ -24,6 +24,8 @@ return {
         sh = { "shfmt" },
         bash = { "shfmt" },
         zsh = { "shfmt" },
+        -- sourcekit-lsp formats with the swift-format bundled in Xcode
+        swift = { lsp_format = "fallback" },
       },
     },
   },
