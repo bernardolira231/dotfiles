@@ -6,25 +6,37 @@ MAIN_WORKSPACES=(1 2 3 4 5)
 SECONDARY_WORKSPACES=(A S F)
 STATUS_ITEMS=(front_app network volume battery clock)
 
-builtin_ids="$(osascript -l JavaScript -e '
-  ObjC.import("AppKit");
-  ObjC.bindFunction("CGDisplayIsBuiltin", ["unsigned int", ["unsigned int"]]);
-  var screens = $.NSScreen.screens, ids = [];
-  for (var i = 0; i < screens.count; i++) {
-    var id = screens.objectAtIndex(i).deviceDescription.objectForKey("NSScreenNumber").js;
-    if ($.CGDisplayIsBuiltin(id)) ids.push(id);
-  }
-  ids.join(",");
-' 2>/dev/null)"
+# Collects external displays into the global "external" array.
+detect_external() {
+  builtin_ids="$(osascript -l JavaScript -e '
+    ObjC.import("AppKit");
+    ObjC.bindFunction("CGDisplayIsBuiltin", ["unsigned int", ["unsigned int"]]);
+    var screens = $.NSScreen.screens, ids = [];
+    for (var i = 0; i < screens.count; i++) {
+      var id = screens.objectAtIndex(i).deviceDescription.objectForKey("NSScreenNumber").js;
+      if ($.CGDisplayIsBuiltin(id)) ids.push(id);
+    }
+    ids.join(",");
+  ' 2>/dev/null)"
 
-external=()
-while read -r arrangement display_id; do
-  [ -z "$arrangement" ] && continue
-  case ",$builtin_ids," in
-    *",$display_id,"*) continue ;;
-  esac
-  external+=("$arrangement")
-done < <(sketchybar --query displays | jq -r '.[] | "\(.["arrangement-id"]) \(.DirectDisplayID)"')
+  external=()
+  while read -r arrangement display_id; do
+    [ -z "$arrangement" ] && continue
+    case ",$builtin_ids," in
+      *",$display_id,"*) continue ;;
+    esac
+    external+=("$arrangement")
+  done < <(sketchybar --query displays | jq -r '.[] | "\(.["arrangement-id"]) \(.DirectDisplayID)"')
+}
+
+# Display events can fire mid-transition (lid closing, monitors reconnecting)
+# when no external display is reported yet. Re-check before hiding the bar.
+detect_external
+for _ in 1 2 3; do
+  [ "${#external[@]}" -gt 0 ] && break
+  sleep 1
+  detect_external
+done
 
 if [ "${#external[@]}" -eq 0 ]; then
   sketchybar --bar hidden=on

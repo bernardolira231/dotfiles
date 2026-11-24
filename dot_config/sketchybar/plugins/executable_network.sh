@@ -2,13 +2,16 @@
 
 DEFAULT_IF=$(route get default 2>/dev/null | awk '/interface:/{print $2}')
 WIFI_DEVICE=$(networksetup -listallhardwareports 2>/dev/null | awk '/Wi-Fi|AirPort/{getline; print $2; exit}')
-ETH_DEVICE=$(networksetup -listallhardwareports 2>/dev/null | awk '/Ethernet/{getline; print $2; exit}')
 IP=$(ipconfig getifaddr "$DEFAULT_IF" 2>/dev/null)
 
 ICON="󰖩"
 LABEL="Offline"
 
-if [ -n "$DEFAULT_IF" ] && [ "$DEFAULT_IF" = "$WIFI_DEVICE" ]; then
+if [[ "$DEFAULT_IF" =~ ^(utun|ipsec|ppp) ]]; then
+  # A full-tunnel VPN (e.g. WireGuard) owns the default route.
+  ICON="󰦝"
+  LABEL="VPN"
+elif [ -n "$DEFAULT_IF" ] && [ "$DEFAULT_IF" = "$WIFI_DEVICE" ]; then
   # macOS hides the SSID without Location Services permission; fall back to "Wi-Fi".
   SSID=$(networksetup -getairportnetwork "$WIFI_DEVICE" 2>/dev/null | sed -n 's/^Current Wi-Fi Network: //p')
   if [ -z "$SSID" ]; then
@@ -17,7 +20,8 @@ if [ -n "$DEFAULT_IF" ] && [ "$DEFAULT_IF" = "$WIFI_DEVICE" ]; then
   fi
   ICON="󰖩"
   LABEL=${SSID:-Wi-Fi}
-elif [ -n "$DEFAULT_IF" ] && [ "$DEFAULT_IF" = "$ETH_DEVICE" ]; then
+elif [ -n "$DEFAULT_IF" ] && [ -n "$IP" ]; then
+  # Any non-Wi-Fi default route with an IP (USB/Thunderbolt adapters included) counts as wired.
   ICON="󰈀"
   LABEL="Ethernet"
 fi
