@@ -48,6 +48,12 @@ sketchybar --add item workspace_state_watcher left \
   --set workspace_state_watcher drawing=off script="$PLUGIN_DIR/workspace_refresh.sh" \
   --subscribe workspace_state_watcher aerospace_workspace_change system_woke
 
+# Keeps the bar on external displays only; re-runs when displays change.
+sketchybar --remove display_layout_watcher >/dev/null 2>&1
+sketchybar --add item display_layout_watcher left \
+  --set display_layout_watcher drawing=off script="$PLUGIN_DIR/display_layout.sh" \
+  --subscribe display_layout_watcher display_change system_woke
+
 # On reload, items may already exist (and keep old style props). Remove and re-add
 # so new defaults/style are applied consistently.
 sketchybar --remove launcher >/dev/null 2>&1
@@ -230,14 +236,20 @@ sketchybar --add item volume.status popup.volume \
 sketchybar --add item volume.settings popup.volume \
   --set volume.settings icon=󰒓 icon.color=$RP_SUBTLE label="Open Sound Settings" width=150 background.drawing=on click_script='open "x-apple.systempreferences:com.apple.Sound-Settings.extension"; sketchybar --set volume popup.drawing=off'
 
+sketchybar --add item battery right \
+  --set battery display=active width=dynamic icon.color=$RP_SUBTLE label.color=$RP_SUBTLE icon.font="IosevkaTerm Nerd Font Mono:Bold:16.0" icon.padding_left=5 icon.padding_right=3 label.font="IosevkaTerm Nerd Font Mono:Semibold:14.0" label.padding_left=3 label.padding_right=6 update_freq=60 script="$PLUGIN_DIR/battery.sh" click_script='open "x-apple.systempreferences:com.apple.Battery-Settings.extension"' \
+  --subscribe battery system_woke power_source_change
+
 sketchybar --add item clock right \
   --set clock display=active width=dynamic icon.color=$RP_SUBTLE label.color=$RP_SUBTLE icon.font="$SYS_ICON_FONT" icon.padding_left=5 icon.padding_right=3 label.font="IosevkaTerm Nerd Font Mono:Semibold:14.0" label.padding_left=3 label.padding_right=6 update_freq=10 icon=􀐫 script="$PLUGIN_DIR/clock.sh"
 
 sketchybar --move clock after volume \
-  --move network after clock
+  --move battery after clock \
+  --move network after battery
 
 sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$(aerospace list-workspaces --focused)"
 sketchybar --trigger network_refresh
 sketchybar --trigger volume_refresh
 "$PLUGIN_DIR/front_app.sh"
+"$PLUGIN_DIR/display_layout.sh"
 sketchybar --update

@@ -77,7 +77,8 @@ on-mode-changed = []
     inner.vertical =   10
     outer.left =       10
     outer.bottom =     10
-    outer.top =        50
+    # Built-in display uses the native menu bar; external displays leave room for SketchyBar.
+    outer.top =        [{ monitor."built-in" = 10 }, 50]
     outer.right =      10
 
 # 'main' binding mode declaration
