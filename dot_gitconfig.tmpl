@@ -1,12 +1,10 @@
 [user]
 	name = Bernardo Lira
 	email = harritolira@gmail.com
-	signingkey = {{ .chezmoi.homeDir }}/.ssh/id_rsa
 [core]
 	excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
-	editor = windsurf --wait
+	editor = nvim
 	autocrlf = input
-	sshCommand = "ssh -i ~/.ssh/id_rsa"
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
