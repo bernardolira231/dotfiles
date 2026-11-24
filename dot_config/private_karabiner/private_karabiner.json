@@ -4,13 +4,14 @@
             "complex_modifications": {
                 "rules": [
                     {
-                        "description": "Left ctrl + hjkl to arrow keys Vim",
+                        "description": "Built-in keyboard: fn + hjkl to arrow keys (Vim)",
                         "manipulators": [
                             {
+                                "conditions": [{ "type": "device_if", "identifiers": [{ "is_built_in_keyboard": true }] }],
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
-                                        "mandatory": ["left_control"],
+                                        "mandatory": ["fn"],
                                         "optional": ["any"]
                                     }
                                 },
@@ -18,10 +19,11 @@
                                 "type": "basic"
                             },
                             {
+                                "conditions": [{ "type": "device_if", "identifiers": [{ "is_built_in_keyboard": true }] }],
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
-                                        "mandatory": ["left_control"],
+                                        "mandatory": ["fn"],
                                         "optional": ["any"]
                                     }
                                 },
@@ -29,10 +31,11 @@
                                 "type": "basic"
                             },
                             {
+                                "conditions": [{ "type": "device_if", "identifiers": [{ "is_built_in_keyboard": true }] }],
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
-                                        "mandatory": ["left_control"],
+                                        "mandatory": ["fn"],
                                         "optional": ["any"]
                                     }
                                 },
@@ -40,14 +43,29 @@
                                 "type": "basic"
                             },
                             {
+                                "conditions": [{ "type": "device_if", "identifiers": [{ "is_built_in_keyboard": true }] }],
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
-                                        "mandatory": ["left_control"],
+                                        "mandatory": ["fn"],
                                         "optional": ["any"]
                                     }
                                 },
                                 "to": [{ "key_code": "right_arrow" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Built-in keyboard: caps lock to left control",
+                        "manipulators": [
+                            {
+                                "conditions": [{ "type": "device_if", "identifiers": [{ "is_built_in_keyboard": true }] }],
+                                "from": {
+                                    "key_code": "caps_lock",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_control" }],
                                 "type": "basic"
                             }
                         ]

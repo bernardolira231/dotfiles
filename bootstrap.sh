@@ -29,6 +29,10 @@ if [[ -d "$HOME/Library/Fonts" ]]; then
   killall fontd 2>/dev/null || true
 fi
 
+# fn is a Vim-arrow layer in Karabiner (fn + hjkl); stop it from opening the emoji picker.
+echo "==> Setting fn key to do nothing on its own"
+defaults write com.apple.HIToolbox AppleFnUsageType -int 0
+
 if [[ ! -x "$HOME/.local/bin/claude" ]]; then
   echo "==> Installing Claude Code"
   curl -fsSL https://claude.ai/install.sh | bash || echo "WARNING: Claude Code install failed." >&2
