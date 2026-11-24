@@ -21,6 +21,14 @@ if ! brew bundle --file="$SOURCE_DIR/Brewfile"; then
   echo "WARNING: some Brewfile entries failed. Continuing; re-run bootstrap later to retry them." >&2
 fi
 
+# Cask fonts can arrive quarantined, and macOS then hides them from apps
+# (SketchyBar shows "?" boxes and ":app:" text instead of icons).
+if [[ -d "$HOME/Library/Fonts" ]]; then
+  echo "==> Clearing quarantine from user fonts"
+  xattr -dr com.apple.quarantine "$HOME/Library/Fonts" 2>/dev/null || true
+  killall fontd 2>/dev/null || true
+fi
+
 if [[ ! -x "$HOME/.local/bin/claude" ]]; then
   echo "==> Installing Claude Code"
   curl -fsSL https://claude.ai/install.sh | bash || echo "WARNING: Claude Code install failed." >&2
