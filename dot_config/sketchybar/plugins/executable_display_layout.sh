@@ -29,6 +29,12 @@ detect_external() {
   done < <(sketchybar --query displays | jq -r '.[] | "\(.["arrangement-id"]) \(.DirectDisplayID)"')
 }
 
+# Hides the native menu bar while SketchyBar is shown on an external display,
+# and restores it ("In Full Screen Only") on the built-in display alone.
+set_menu_bar_autohide() {
+  osascript -e "tell application \"System Events\" to set autohide menu bar of dock preferences to $1" >/dev/null 2>&1
+}
+
 # Display events can fire mid-transition (lid closing, monitors reconnecting)
 # when no external display is reported yet. Re-check before hiding the bar.
 detect_external
@@ -40,6 +46,7 @@ done
 
 if [ "${#external[@]}" -eq 0 ]; then
   sketchybar --bar hidden=on
+  set_menu_bar_autohide false
   exit 0
 fi
 
@@ -77,3 +84,4 @@ for item in "${STATUS_ITEMS[@]}"; do
 done
 
 sketchybar "${args[@]}"
+set_menu_bar_autohide true
