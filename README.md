@@ -29,6 +29,9 @@ bash "$(chezmoi source-path)/bootstrap.sh"
 `bootstrap.sh` installs Homebrew, the `Brewfile`, Oh My Zsh and TPM, then runs
 `chezmoi apply` and prints the remaining manual steps.
 
+`run_onchange_after_macos-defaults.sh` applies the macOS preferences (Dock,
+Finder, trackpad, keyboard). chezmoi re-runs it whenever the script changes.
+
 ## Rules
 
 This repository is public. Never add credentials, tokens, auth files, histories,
