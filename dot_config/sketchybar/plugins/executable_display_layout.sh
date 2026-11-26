@@ -31,8 +31,13 @@ detect_external() {
 
 # Hides the native menu bar while SketchyBar is shown on an external display,
 # and restores it ("In Full Screen Only") on the built-in display alone.
+# Failures (e.g. revoked Automation permission) are appended to
+# ~/Library/Logs/sketchybar-menubar.log.
 set_menu_bar_autohide() {
-  osascript -e "tell application \"System Events\" to set autohide menu bar of dock preferences to $1" >/dev/null 2>&1
+  local out
+  if ! out="$(osascript -e "tell application \"System Events\" to set autohide menu bar of dock preferences to $1" 2>&1)"; then
+    echo "$(date '+%F %T') autohide=$1 failed: $out" >>"$HOME/Library/Logs/sketchybar-menubar.log"
+  fi
 }
 
 # Display events can fire mid-transition (lid closing, monitors reconnecting)
