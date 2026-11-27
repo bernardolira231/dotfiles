@@ -82,9 +82,11 @@ for ws in "${SECONDARY_WORKSPACES[@]}"; do
   [ "$ws" != F ] && args+=(--set "workspace_gap.$ws" display="$secondary_display" drawing="$secondary_drawing")
 done
 
+args+=(--set workspace.A padding_left=0)
+
 for item in "${STATUS_ITEMS[@]}"; do
   args+=(--set "$item" display="$status_display")
 done
 
-sketchybar "${args[@]}"
+sketchybar "${args[@]}" --update
 set_menu_bar_autohide true
