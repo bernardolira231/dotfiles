@@ -63,13 +63,13 @@ if [ "${#external[@]}" -ge 2 ]; then
   main_display="${external[0]}"
   secondary_display="${external[1]}"
   status_display=active
-  secondary_gap=0
+  secondary_drawing=on
 else
-  # One external display: every workspace on the same bar.
+  # One external display: only the main workspaces; A/S/F are hidden.
   main_display="${external[0]}"
   secondary_display="${external[0]}"
   status_display="${external[0]}"
-  secondary_gap=10
+  secondary_drawing=off
 fi
 
 for ws in "${MAIN_WORKSPACES[@]}"; do
@@ -78,11 +78,9 @@ for ws in "${MAIN_WORKSPACES[@]}"; do
 done
 
 for ws in "${SECONDARY_WORKSPACES[@]}"; do
-  args+=(--set "workspace.$ws" display="$secondary_display")
-  [ "$ws" != F ] && args+=(--set "workspace_gap.$ws" display="$secondary_display")
+  args+=(--set "workspace.$ws" display="$secondary_display" drawing="$secondary_drawing")
+  [ "$ws" != F ] && args+=(--set "workspace_gap.$ws" display="$secondary_display" drawing="$secondary_drawing")
 done
-
-args+=(--set workspace.A padding_left="$secondary_gap")
 
 for item in "${STATUS_ITEMS[@]}"; do
   args+=(--set "$item" display="$status_display")
