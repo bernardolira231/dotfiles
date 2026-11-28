@@ -33,8 +33,12 @@ detect_external() {
 # and restores it ("In Full Screen Only") on the built-in display alone.
 # Failures (e.g. revoked Automation permission) are appended to
 # ~/Library/Logs/sketchybar-menubar.log.
+# Skips the write when the value already matches: every write resizes the
+# screen and fires display_change, which would re-run this script in a loop.
 set_menu_bar_autohide() {
-  local out
+  local out current
+  current="$(osascript -e 'tell application "System Events" to get autohide menu bar of dock preferences' 2>/dev/null)"
+  [ "$current" = "$1" ] && return 0
   if ! out="$(osascript -e "tell application \"System Events\" to set autohide menu bar of dock preferences to $1" 2>&1)"; then
     echo "$(date '+%F %T') autohide=$1 failed: $out" >>"$HOME/Library/Logs/sketchybar-menubar.log"
   fi
@@ -49,8 +53,19 @@ for _ in 1 2 3; do
   detect_external
 done
 
+# Last applied layout. Re-applying an unchanged layout (and its --update,
+# which re-runs every item script) is skipped so events cannot feed a loop.
+STATE_FILE="${TMPDIR:-/tmp}/sketchybar_display_layout.state"
+
+# Returns success when the layout differs from the last applied one.
+layout_changed() {
+  [ "$(cat "$STATE_FILE" 2>/dev/null)" != "$1" ]
+}
+
 if [ "${#external[@]}" -eq 0 ]; then
-  sketchybar --bar hidden=on
+  if layout_changed "hidden"; then
+    sketchybar --bar hidden=on && echo "hidden" >"$STATE_FILE"
+  fi
   set_menu_bar_autohide false
   exit 0
 fi
@@ -88,5 +103,9 @@ for item in "${STATUS_ITEMS[@]}"; do
   args+=(--set "$item" display="$status_display")
 done
 
-sketchybar "${args[@]}" --update
+layout_key="${args[*]}"
+if layout_changed "$layout_key"; then
+  # Record the layout only once applied, so a failed apply is retried.
+  sketchybar "${args[@]}" --update && echo "$layout_key" >"$STATE_FILE"
+fi
 set_menu_bar_autohide true

@@ -251,5 +251,7 @@ sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE="$(aerospace l
 sketchybar --trigger network_refresh
 sketchybar --trigger volume_refresh
 "$PLUGIN_DIR/front_app.sh"
+# Force a full layout on (re)start; display_layout.sh skips unchanged layouts.
+rm -f "${TMPDIR:-/tmp}/sketchybar_display_layout.state"
 "$PLUGIN_DIR/display_layout.sh"
 sketchybar --update
